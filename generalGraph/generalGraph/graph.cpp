@@ -10,15 +10,16 @@ int main() {
 	auto* c = g.add_vertex(3);
 	auto* f = g.connect(c, a, 3.25);
 	auto* e = g.connect(a, b, 3.14);
+	auto* h = g.connect(a, b, 2.14); 
+	auto* i = g.connect(c, a, 2.44);
+
 
 	
 	for (auto&& i : g.edges)
 		cout << i->from->value << " --" << i->value << "--> " << i->to->value << endl;
 	cout << endl; 
-	g.disconnect(f);
-	for (auto&& i : g.edges)
+	for (auto&& i: g.edges_from(a))
 		cout << i->from->value << " --" << i->value << "--> " << i->to->value << endl;
-
 	string blank;
 		getline(cin, blank);
 

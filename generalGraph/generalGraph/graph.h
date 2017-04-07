@@ -36,13 +36,19 @@ struct Graph {
 		return last.get();
 	}
 
-	etype * connect(vtype* a, vtype* b, EdgeValue value) {
+	etype* connect(vtype* a, vtype* b, EdgeValue value) {
 		edges.push_back(make_unique<etype>(a, b, value));
 		auto&& last = edges.back();
 		return last.get();
 	}
+	vector<etype*> edges_from(vtype* a)
+	{
+		vector<etype *> output; 
+		std::copy_if(edges.begin(), edges.end(),std::back_inserter(output), [this, a](auto&& edge) {return edge->from == a; }); 
+		return output; 
+	}
 	void disconnect(etype* e)	{
-		std::remove_if(edges.begin(),edges.end(), [this, e](auto&& edge) { return edge.get() == e; }); 
+		edges.erase(std::remove_if(edges.begin(),edges.end(), [this, e](auto&& edge) { return edge.get() == e; }));
 	}
 
 	
