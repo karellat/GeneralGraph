@@ -18,10 +18,13 @@ int main() {
 	for (auto&& i : g.edges)
 		cout << i->from->value << " --" << i->value << "--> " << i->to->value << endl;
 	cout << endl; 
-	for (auto&& i: g.edges_from(a))
+	auto v = g.find(2, a);
+	for (auto&& i: g.edges_to(v))
 		cout << i->from->value << " --" << i->value << "--> " << i->to->value << endl;
 	string blank;
-		getline(cin, blank);
+
+	
+	getline(cin, blank);
 
 	return 0;
 }

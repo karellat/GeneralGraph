@@ -2,6 +2,7 @@
 #include <vector>
 #include <memory>
 #include <algorithm>
+#include <queue>
 using namespace std;
 
 template <typename VertexValue>
@@ -41,19 +42,47 @@ struct Graph {
 		auto&& last = edges.back();
 		return last.get();
 	}
+
+	void disconnect(etype* e) {
+		edges.erase(std::remove_if(edges.begin(), edges.end(), [this, e](auto&& edge) { return edge.get() == e; }));
+	}
+
 	vector<etype*> edges_from(vtype* a)
-	{
+	{ 
 		vector<etype *> output; 
-		std::copy_if(edges.begin(), edges.end(),std::back_inserter(output), [this, a](auto&& edge) {return edge->from == a; }); 
+		for (auto&& edge : edges)
+			if (edge.get()->from == a)
+				output.push_back(edge.get());
 		return output; 
 	}
-	void disconnect(etype* e)	{
-		edges.erase(std::remove_if(edges.begin(),edges.end(), [this, e](auto&& edge) { return edge.get() == e; }));
+
+	vector<etype *> edges_to(vtype* a)
+	{
+		vector<etype *> output; 
+		for (auto&& edge : edges)
+			if (edge.get()->to == a)
+				output.push_back(edge.get());
+		return output;
 	}
 
-	
+    vtype * find(VertexValue value,vtype * starting_vertex)
+	{
+		std::queue<vtype *> q; 
+		q.push(starting_vertex); 
 
+		while(q.size() != 0)
+		{
+			vtype* v = q.front();
+			q.pop();
+			
+			if (v->value == value)
+				return v; 
 
+			for (auto i : edges_from(v))
+				q.push(i->to);
+		}
+		return nullptr; 
+	}
 };
 
 
