@@ -1,29 +1,32 @@
 #include "graph.h"
 #include <string>
 #include <iostream>
+#include <set>
 using namespace  std;
 int main() {
 
-	Graph<int, double> g;
-	auto* a = g.add_vertex(1);
-	auto* b = g.add_vertex(2);
-	auto* c = g.add_vertex(3);
-	auto* f = g.connect(c, a, 3.25);
-	auto* e = g.connect(a, b, 3.14);
-	auto* h = g.connect(a, b, 2.14); 
-	auto* i = g.connect(c, a, 2.44);
+	Graph<unique_ptr<int>, unique_ptr<double>> g;
+	auto* a = g.add_vertex(make_unique<int>(1));
+	auto* b = g.add_vertex(make_unique<int>(2));
+	auto* c = g.add_vertex(make_unique<int>(3));
+	auto* d = g.add_vertex(make_unique<int>(4));
+	auto* e = g.add_vertex(make_unique<int>(5));
+	auto* f = g.add_vertex(make_unique<int>(6));
+
+	g.connect(a, c, make_unique<double>(1.0));
+	g.connect(b, d, make_unique<double>(2.0));
+	g.connect(c, d, make_unique<double>(3.0));
+	g.connect(c, e, make_unique<double>(4.0));
+	g.connect(c, f, make_unique<double>(5.0));
+	g.connect(d, f, make_unique<double>(6.0));
+
+	if (g.CycleDetection())
+		cout << "true";
+	else
+		cout << "false";
 
 
-	
-	for (auto&& i : g.edges)
-		cout << i->from->value << " --" << i->value << "--> " << i->to->value << endl;
-	cout << endl; 
-	auto v = g.find(2, a);
-	for (auto&& i: g.edges_to(v))
-		cout << i->from->value << " --" << i->value << "--> " << i->to->value << endl;
-	string blank;
-
-	
+	std::string blank; 
 	getline(cin, blank);
 
 	return 0;
